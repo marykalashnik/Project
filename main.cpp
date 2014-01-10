@@ -48,15 +48,16 @@ HTEXTURE tstart=0;
 HTEXTURE cur=0;
 hgeSprite *cursor = NULL;
 
-//HEFFECT snd;
-//HEFFECT back;
+HEFFECT snd;
+HEFFECT back;
+
 float delta = 0;
 bool pause =0;
 bool checker_menu=true;
 bool MenuUpgrade(float time);
 bool FrameFunc()
 {
-	//snd = hge->Effect_PlayEx(back,50,0,14.0,true);
+	snd = hge->Effect_PlayEx(back,50,0,14.0,true);
 	delta = hge->Timer_GetDelta();
 	if(checker_menu)	
 	{
@@ -168,7 +169,12 @@ bool FrameFunc()
 			i++;
 		}
 	}
-	
+	if(hge->Input_GetKeyState(HGEK_R))
+	{
+		count=0;
+		oops=0;
+		propusk=0;
+	}
 	if(propusk>30)
 	{
 		if(hge->Input_GetKeyState(HGEK_1)) return true;
@@ -228,6 +234,7 @@ bool RenderFunc()
 		fnt->printf(5, 30, HGETEXT_LEFT, "Lost:%d", propusk);
 		fnt->printf(5, 55, HGETEXT_LEFT, "Tomato:%d", oops);
 		fnt->printf(795, 5, HGETEXT_RIGHT, "PRESS 'P' TO PAUSE");
+		fnt->printf(795, 30, HGETEXT_RIGHT, "PRESS 'R' TO RESTART");
 		if(propusk>30)
 		{
 		
@@ -252,8 +259,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);//функция которая отвечает за фреймы
 	hge->System_SetState(HGE_RENDERFUNC,RenderFunc);//за вывод на экран
-	hge->System_SetState(HGE_WINDOWED, true);//оконный режим вкл/выкл
-	hge->System_SetState(HGE_USESOUND, false);//не использовать библеотеку басс
+	hge->System_SetState(HGE_WINDOWED, false);//оконный режим вкл/выкл
+	hge->System_SetState(HGE_USESOUND, true);//не использовать библеотеку басс
 	hge->System_SetState(HGE_FPS, HGEFPS_VSYNC);// частота, с которой будет вызываться функция кадра.
 												//HGEFPS_VSYNC - частота синхронизируется с частотой обновления.
 	hge->System_SetState(HGE_TITLE,"Nikita & Food");
@@ -290,11 +297,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 		gui->SetCursor(cursor);
 		gui->SetFocus(1);
 		gui->Enter();
-
-		//fntpause=new hgeFont("font1.fnt");
-		//file = fopen("best.txt","a+t");
-		//char co=(char)count;
-		//fputc(co,file);
+		back=hge->Effect_Load("images/music.mp3");
 
 		hge->System_Start();//То потекла моча по трубам
 		//Выкидываем мусор
